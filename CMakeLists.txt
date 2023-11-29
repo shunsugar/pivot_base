@@ -23,6 +23,7 @@ find_package(catkin REQUIRED
         roscpp
         rotate_recovery
         std_srvs
+        tf
         tf2_geometry_msgs
         tf2_ros
 )
