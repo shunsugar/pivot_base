@@ -6,7 +6,7 @@
   <arg name="waypoints_file" default="$(find tsukuba2023)/config/waypoints/nakaniwa/waypoints_nakaniwa_sim.yaml"/> 
   <arg name="init_pos_file"  default="$(find tsukuba2023)/config/initial_pose.yaml"/>
   <arg name="odom_topic"     default="/odometry/filtered"/>
-  <arg name="mb_cmd_vel"     default="/move_base/cmd_vel"/>
+  <arg name="pb_cmd_vel"     default="/pivot_base/cmd_vel"/>
   <arg name="wp_cmd_vel"     default="/cmd_vel"/>
 
 
@@ -14,7 +14,7 @@
   <!-- ++++++++++++++++++++++++++++++++++++++++++++++ -->
   <node pkg="pivot_base" type="pivot_base_node" respawn="false" name="pivot_base" output="screen">
     <remap from="/odom"    to="$(arg odom_topic)"/>
-    <remap from="/cmd_vel" to="$(arg mb_cmd_vel)"/>
+    <remap from="/cmd_vel" to="$(arg pb_cmd_vel)"/>
     <rosparam file="$(find tsukuba2023)/params/foot_print.yaml"                 command="load" ns="global_costmap"/>
     <rosparam file="$(find tsukuba2023)/params/foot_print.yaml"                 command="load" ns="local_costmap"/>
     <rosparam file="$(find tsukuba2023)/params/local_costmap_params.yaml"       command="load"/>
@@ -34,18 +34,6 @@
   </node>
   <!-- ++++++++++++++++++++++++++++++++++++++++++++++ -->
 
-  <!-- For waypoints navigation 
-  <include file="$(find waypoint_nav)/launch/waypoint_nav.launch">
-    <arg name="robot_frame"        value="base_footprint"/>
-    <arg name="waypoints_file"     value="$(arg waypoints_file)"/>
-    <arg name="StartFromTheMiddle" value="true"/>
-    <arg name="cmd_vel_topic_in"   value="$(arg mb_cmd_vel)"/>
-    <arg name="cmd_vel_topic_out"  value="$(arg wp_cmd_vel)"/>
-    <arg name="max_vel_param"      value="/move_base/TrajectoryPlannerROS/max_vel_x"/>
-    <arg name="min_vel_param"      value="/move_base/TrajectoryPlannerROS/min_vel_x"/>
-    <arg name="tandem_scan"        value="hokuyo_scan"/>
-  </include>
--->
-  <node pkg="rviz" type="rviz" name="rviz" args="-d $(find tsukuba2023)/rviz_cfg/nav.rviz"/>
+  <node pkg="rviz" type="rviz" name="rviz" args="-d $(find pivot_base)/rviz_cfg/nav.rviz"/>
 
 </launch>
