@@ -1,0 +1,6 @@
+int main(int argc, char** argv){
+  ros::init(argc, argv, "pivot_base");
+  PivotBase pivot_base;
+  ros::spin();
+  return 0;
+}
