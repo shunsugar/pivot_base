@@ -15,6 +15,7 @@
   <node pkg="pivot_base" type="pivot_base_node" respawn="false" name="pivot_base" output="screen">
     <remap from="/odom"    to="$(arg odom_topic)"/>
     <remap from="/cmd_vel" to="$(arg pb_cmd_vel)"/>
+<!--
     <rosparam file="$(find tsukuba2023)/params/foot_print.yaml"                 command="load" ns="global_costmap"/>
     <rosparam file="$(find tsukuba2023)/params/foot_print.yaml"                 command="load" ns="local_costmap"/>
     <rosparam file="$(find tsukuba2023)/params/local_costmap_params.yaml"       command="load"/>
@@ -23,6 +24,8 @@
     <rosparam file="$(find tsukuba2023)/params/base_global_planner_params.yaml" command="load"/>
     <rosparam file="$(find tsukuba2023)/params/base_local_planner_params.yaml"  command="load"/>
     <rosparam file="$(find tsukuba2023)/params/recovery_params.yaml"            command="load"/>
+-->
+    <rosparam file="$(find pivot_base)/config/pivot_base_params.yaml"           command="load"/>
   </node>
 
   <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file).yaml"/>
