@@ -21,6 +21,7 @@ find_package(catkin REQUIRED
         navfn
         pluginlib
         roscpp
+        rospy
         rotate_recovery
         std_srvs
         tf
@@ -43,6 +44,7 @@ catkin_package(
         move_base_msgs
         nav_msgs
         roscpp
+        rospy
 )
 
 # Specify additional locations of header files
@@ -55,6 +57,17 @@ target_link_libraries(pivot_base_node ${catkin_LIBRARIES})
 add_executable(move_navigation_node src/move_navigation.cpp)
 target_link_libraries(move_navigation_node ${catkin_LIBRARIES})
 
+add_executable(unit_test_node src/unit_test.cpp)
+target_link_libraries(unit_test_node ${catkin_LIBRARIES})
+
+add_executable(pivot_planner_node src/pivot_planner.cpp)
+target_link_libraries(pivot_planner_node ${catkin_LIBRARIES})
+
 # Install Cpp executable
 install(TARGETS pivot_base_node RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
 install(TARGETS move_navigation_node RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
+install(TARGETS unit_test_node RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
+install(TARGETS pivot_planner_node RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
+
+# Install Python executable
+#install(PROGRAMS scripts/vgraph_planner.py DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})

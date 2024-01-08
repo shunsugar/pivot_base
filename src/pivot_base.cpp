@@ -13,15 +13,19 @@ enum class PivotState {
 
 class PivotBase {
 public:
-//  PivotBase() : global_costmap_("global_costmap", tf_), local_costmap_("local_costmap", tf_) {
   PivotBase() : tfBuffer(), tfListener(tfBuffer), global_costmap_("global_costmap", tfBuffer), local_costmap_("local_costmap", tfBuffer) {
+//    pnh_.param("base_global_planner", global_planner_, std::string("navfn/NavfnROS"));
+//    pnh_.param("base_local_planner", local_planner_, std::string("base_local_planner/TrajectoryPlannerROS"));
+//    pnh_.param("global_costmap", global_costmap_);
+//    pnh_.param("local_costmap", local_costmap_);
+    // .param(topic, address, value);
+    
     vel_pub_ = nh_.advertise<geometry_msgs::Twist>("/cmd_vel", 10);
 //    goal_sub_ = nh_.subscribe<geometry_msgs::PoseStamped>("goal", 1, &PivotBase::goalCB, this);
     goal_sub_ = nh_.subscribe("/move_base_simple/goal", 10, &PivotBase::goalCB, this);
     
-    global_planner_.initialize("global_planner", &global_costmap_);
-//    local_planner_.initialize("local_planner", &tf_, &local_costmap_);
-    local_planner_.initialize("local_planner", &tfBuffer, &local_costmap_);
+//    global_planner_.initialize("global_planner", &global_costmap_);
+//    local_planner_.initialize("local_planner", &tfBuffer, &local_costmap_);
     state_ = PivotState::STANDBY;
     timer_ = nh_.createTimer(ros::Duration(0,2), &PivotBase::timerCB, this);
   }
@@ -85,6 +89,7 @@ public:
   }
   
   ros::NodeHandle nh_;
+  ros::NodeHandle pnh_;
   tf::TransformListener tf_;
   tf2_ros::Buffer tfBuffer;
   tf2_ros::TransformListener tfListener;
