@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+
+<launch>
+
+  <arg name="map_file"       default="$(find tsukuba2023)/maps/nakaniwa/mymap_nakaniwa_sim"/>
+  <arg name="waypoints_file" default="$(find tsukuba2023)/config/waypoints/nakaniwa/waypoints_nakaniwa_sim.yaml"/> 
+  <arg name="init_pos_file"  default="$(find tsukuba2023)/config/initial_pose.yaml"/>
+  <arg name="odom_topic"     default="/odometry/filtered"/>
+  <arg name="pb_cmd_vel"     default="/pivot_base/cmd_vel"/>
+  <arg name="wp_cmd_vel"     default="/cmd_vel"/>
+
+
+  <!-- This section depends on the navigation package -->
+  <!-- ++++++++++++++++++++++++++++++++++++++++++++++ 
+  <node pkg="pivot_base" type="pivot_base_node" respawn="false" name="pivot_base" output="screen">-->
+  <node pkg="pivot_base" type="move_navigation_node" respawn="false" name="move_navigation" output="screen">
+    <remap from="/odom"    to="$(arg odom_topic)"/>
+    <remap from="/cmd_vel" to="$(arg pb_cmd_vel)"/>
+<!--
+    <rosparam file="$(find tsukuba2023)/params/foot_print.yaml"                 command="load" ns="global_costmap"/>
+    <rosparam file="$(find tsukuba2023)/params/foot_print.yaml"                 command="load" ns="local_costmap"/>
+    <rosparam file="$(find tsukuba2023)/params/local_costmap_params.yaml"       command="load"/>
+    <rosparam file="$(find tsukuba2023)/params/global_costmap_params.yaml"      command="load"/>
+    <rosparam file="$(find tsukuba2023)/params/move_base_params.yaml"           command="load"/>
+    <rosparam file="$(find tsukuba2023)/params/base_global_planner_params.yaml" command="load"/>
+    <rosparam file="$(find tsukuba2023)/params/base_local_planner_params.yaml"  command="load"/>
+    <rosparam file="$(find tsukuba2023)/params/recovery_params.yaml"            command="load"/>
+-->
+    <rosparam file="$(find pivot_base)/config/pivot_base_params.yaml"           command="load"/>
+  </node>
+
+  <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file).yaml"/>
+
+  <node pkg="amcl" type="amcl" name="amcl" output="screen">
+    <!--<remap from="scan" to="velodyne_scan"/>-->
+    <rosparam file="$(find tsukuba2023)/params/localization_params.yaml"            command="load"/>
+    <rosparam file="$(arg init_pos_file)"                                           command="load"/>
+  </node>
+  <!-- ++++++++++++++++++++++++++++++++++++++++++++++ -->
+
+  <node pkg="rviz" type="rviz" name="rviz" args="-d $(find pivot_base)/rviz/nav.rviz"/>
+
+</launch>
